@@ -1,20 +1,33 @@
 package com.rental.car.car;
 
+import com.rental.car.car.model.Car;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequiredArgsConstructor
+import java.util.List;
+
+@RestController
 @RequestMapping("/car")
+@RequiredArgsConstructor
 public class CarController {
     private final CarService carService;
 
     @GetMapping
-    public String getCars(Model model){
-        model.addAttribute("car",carService.findAll());
-        return "car/list";
+    @ResponseStatus(HttpStatus.OK)
+    public List<Car> getCars() {
+        return carService.findAll();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createCar(@RequestBody Car car) {
+        carService.save(car);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteCar(@PathVariable("id") long carId){
+        carService.delete(carId);
     }
 }
