@@ -4,6 +4,7 @@ import com.rental.car.car.model.Car;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -21,5 +22,10 @@ public class CarService {
 
     public void delete(long carId){
         carRepository.deleteById(carId);
+    }
+
+    public Car find(long carId){
+        return carRepository.findById(carId)
+                .orElseThrow(() -> new EntityNotFoundException("ni ma"));
     }
 }
