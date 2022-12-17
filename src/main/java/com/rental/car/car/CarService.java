@@ -20,12 +20,12 @@ public class CarService {
         return carRepository.save(car);
     }
 
-    public void delete(long carId){
+    public void delete(long carId) {
         carRepository.deleteById(carId);
     }
 
-    public Car find(long carId){
+    public Car find(long carId) {
         return carRepository.findById(carId)
-                .orElseThrow(() -> new EntityNotFoundException("ni ma"));
+                .orElseThrow(() -> new EntityNotFoundException("Car with provided id does not exist!"));
     }
 }
