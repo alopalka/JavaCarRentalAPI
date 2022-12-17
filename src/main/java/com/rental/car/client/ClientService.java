@@ -29,4 +29,9 @@ public class ClientService {
         return clientRepository.findById(clientId)
                 .orElseThrow(() -> new EntityNotFoundException("Rental with provided id does not exist!"));
     }
+
+    public Client findWithLockingById(long clientId){
+        return clientRepository.findWithLockingById(clientId)
+                .orElseThrow(() -> new EntityNotFoundException("Rental with provided id does not exist!"));
+    }
 }

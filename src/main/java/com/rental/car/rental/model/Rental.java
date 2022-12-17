@@ -4,10 +4,7 @@ import com.rental.car.car.model.Car;
 import com.rental.car.client.model.Client;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -20,7 +17,9 @@ public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @ManyToOne
     private Client client;
+    @ManyToOne
     private Car car;
     private LocalDateTime dateFrom;
     private LocalDateTime dateTo;

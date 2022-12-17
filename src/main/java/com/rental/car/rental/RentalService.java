@@ -1,5 +1,9 @@
 package com.rental.car.rental;
 
+import com.rental.car.car.CarService;
+import com.rental.car.car.model.Car;
+import com.rental.car.client.ClientService;
+import com.rental.car.client.model.Client;
 import com.rental.car.rental.model.Rental;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,12 +15,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RentalService {
     private final RentalRepository rentalRepository;
+    private final CarService carService;
+    private final ClientService clientService;
 
     public List<Rental> findAll() {
         return rentalRepository.findAll();
     }
 
-    public Rental save(Rental rental) {
+    public Rental save(Rental rental, long carId, long clientId) {
+        Car car = carService.findWithLockingById(carId);
+        Client client = clientService.findWithLockingById(clientId);
+
+        List<Rental> carsRents = rentalRepository.findAllCarIdAndDateBetween(
+                carId, rental.getDateFrom(), rental.getDateTo()
+        );
+
+        // TODO: correct throw error type
+
+        if (!carsRents.isEmpty()) {
+            throw new EntityNotFoundException("Car is being rented at this time!");
+        }
+        rental.setCar(car);
+        rental.setClient(client);
         return rentalRepository.save(rental);
     }
 

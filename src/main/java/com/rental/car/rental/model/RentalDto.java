@@ -31,7 +31,7 @@ public class RentalDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", shape = JsonFormat.Shape.STRING)
     private LocalDateTime dateTo;
 
-    private static RentalDto fromEntity(Rental rental) {
+    public static RentalDto fromEntity(Rental rental) {
         return RentalDto.builder()
                 .id(rental.getId())
                 .carId(rental.getCar().getId())
@@ -41,7 +41,7 @@ public class RentalDto {
                 .build();
     }
 
-    private Rental toEntity() {
+    public Rental toEntity() {
         return Rental.builder()
                 .dateFrom(dateFrom)
                 .dateTo(dateTo)
