@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +27,9 @@ public class RentalService {
         Car car = carService.findWithLockingById(carId);
         Client client = clientService.findWithLockingById(clientId);
 
-        List<Rental> carsRents = rentalRepository.findAllCarIdAndDateBetween(
-                carId, rental.getDateFrom(), rental.getDateTo()
+        List<Rental> carsRents = rentalRepository.findAllByCarIdAndDateBetween(
+                carId, rental.getDate(), rental.getDate().plusHours(rental.getDurationHours())
         );
-
-        // TODO: correct throw error type
 
         if (!carsRents.isEmpty()) {
             throw new EntityNotFoundException("Car is being rented at this time!");
@@ -48,4 +47,5 @@ public class RentalService {
         return rentalRepository.findById(rentalId)
                 .orElseThrow(() -> new EntityNotFoundException("Rental with provided id does not exist!"));
     }
+
 }

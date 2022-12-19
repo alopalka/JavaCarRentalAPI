@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
@@ -24,27 +23,24 @@ public class RentalDto {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime dateFrom;
+    private LocalDateTime date;
 
-    @Future(message = "Planned rental finish date should be in future")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime dateTo;
+    private int durationHours;
 
     public static RentalDto fromEntity(Rental rental) {
         return RentalDto.builder()
                 .id(rental.getId())
                 .carId(rental.getCar().getId())
                 .clientId(rental.getClient().getId())
-                .dateFrom(rental.getDateFrom())
-                .dateTo(rental.getDateTo())
+                .date(rental.getDate())
+                .durationHours(rental.getDurationHours())
                 .build();
     }
 
     public Rental toEntity() {
         return Rental.builder()
-                .dateFrom(dateFrom)
-                .dateTo(dateTo)
+                .date(date)
+                .durationHours(durationHours)
                 .build();
     }
 }

@@ -1,8 +1,10 @@
 package com.rental.car.client.model;
 
+import com.rental.car.rental.model.Rental;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,4 +25,7 @@ public class Client {
 
     @Column(unique = true)
     private String email;
+
+    @OneToMany(mappedBy = "client")
+    private Set<Rental> rentals;
 }
