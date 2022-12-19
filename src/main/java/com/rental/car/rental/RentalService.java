@@ -36,6 +36,7 @@ public class RentalService {
         }
         rental.setCar(car);
         rental.setClient(client);
+        rental.setPrice(1000);
         return rentalRepository.save(rental);
     }
 

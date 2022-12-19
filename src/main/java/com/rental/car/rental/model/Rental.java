@@ -23,4 +23,5 @@ public class Rental {
     private Car car;
     private LocalDateTime date;
     private int durationHours;
+    private double price;
 }

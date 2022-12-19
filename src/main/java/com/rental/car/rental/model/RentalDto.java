@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
@@ -27,6 +28,9 @@ public class RentalDto {
 
     private int durationHours;
 
+    @ReadOnlyProperty
+    private double price;
+
     public static RentalDto fromEntity(Rental rental) {
         return RentalDto.builder()
                 .id(rental.getId())
@@ -34,6 +38,7 @@ public class RentalDto {
                 .clientId(rental.getClient().getId())
                 .date(rental.getDate())
                 .durationHours(rental.getDurationHours())
+                .price(rental.getPrice())
                 .build();
     }
 

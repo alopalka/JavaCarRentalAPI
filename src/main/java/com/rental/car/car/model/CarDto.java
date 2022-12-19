@@ -14,12 +14,14 @@ public class CarDto {
     private long id;
     private String make;
     private String model;
+    private CarType carType;
 
     public static CarDto fromEntity(Car car) {
         return CarDto.builder()
                 .id(car.getId())
                 .make(car.getMake())
                 .model(car.getModel())
+                .carType(car.getCarType())
                 .build();
     }
 
@@ -27,6 +29,7 @@ public class CarDto {
         return Car.builder()
                 .make(make)
                 .model(model)
+                .carType(carType)
                 .build();
     }
 

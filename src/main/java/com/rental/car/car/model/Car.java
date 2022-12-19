@@ -19,6 +19,9 @@ public class Car {
     private String make;
     private String model;
 
+    @Enumerated(EnumType.STRING)
+    private CarType carType;
+
     @OneToMany(mappedBy = "car")
     private Set<Rental> rentals;
 }
