@@ -1,5 +1,12 @@
 package com.rental.car.car.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@RequiredArgsConstructor
 public enum CarType {
     ECONOMY(1),
     SPORT(2),
@@ -7,17 +14,6 @@ public enum CarType {
     PREMIUM(3),
     LUXURY(3.5),
     ;
-    private double multipler;
-
-    CarType(double multipler) {
-        this.multipler = multipler;
-    }
-
-    public double getMultipler() {
-        return multipler;
-    }
-
-    public void setMultipler(double multipler) {
-        this.multipler = multipler;
-    }
+    private final double multipler;
+    public static final double BASE = 16;
 }

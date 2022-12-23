@@ -2,6 +2,7 @@ package com.rental.car.rental;
 
 import com.rental.car.car.CarService;
 import com.rental.car.car.model.Car;
+import com.rental.car.car.model.CarType;
 import com.rental.car.client.ClientService;
 import com.rental.car.client.model.Client;
 import com.rental.car.rental.model.Rental;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +38,10 @@ public class RentalService {
         }
         rental.setCar(car);
         rental.setClient(client);
-        rental.setPrice(1000);
+
+        double priceForRent = car.getCarType().getMultipler() * CarType.BASE * rental.getDurationHours();
+
+        rental.setPrice(priceForRent);
         return rentalRepository.save(rental);
     }
 

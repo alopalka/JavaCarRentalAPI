@@ -1,6 +1,5 @@
 package com.rental.car.rental;
 
-
 import com.rental.car.rental.model.Rental;
 import com.rental.car.rental.model.RentalDto;
 import lombok.RequiredArgsConstructor;
@@ -32,4 +31,11 @@ public class RentalController {
         Rental rental = rentalService.save(dto.toEntity(), carId, clientId);
         return RentalDto.fromEntity(rental);
     }
+
+    @DeleteMapping(value = "/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable("id") long clientId){
+        rentalService.delete(clientId);
+    }
+
 }
