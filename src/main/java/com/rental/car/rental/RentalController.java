@@ -32,10 +32,17 @@ public class RentalController {
         return RentalDto.fromEntity(rental);
     }
 
+    @GetMapping(value = "/find/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public RentalDto find(@PathVariable("id") long rentalId) {
+        Rental rental = rentalService.find(rentalId);
+        return RentalDto.fromEntity(rental);
+    }
+
     @DeleteMapping(value = "/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") long clientId){
-        rentalService.delete(clientId);
+    public void delete(@PathVariable("id") long rentalId) {
+        rentalService.delete(rentalId);
     }
 
 }

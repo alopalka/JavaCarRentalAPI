@@ -29,7 +29,7 @@ public class CarService {
                 .orElseThrow(() -> new EntityNotFoundException("Car with provided id does not exist!"));
     }
 
-    public Car findWithLockingById(long carId){
+    public Car findWithLockingById(long carId) {
         return carRepository.findWithLockingById(carId)
                 .orElseThrow(() -> new EntityNotFoundException("Car with provided id does not exist!"));
     }

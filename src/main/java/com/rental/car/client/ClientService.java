@@ -1,7 +1,6 @@
 package com.rental.car.client;
 
 import com.rental.car.client.model.Client;
-import com.rental.car.rental.model.Rental;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,7 @@ public class ClientService {
                 .orElseThrow(() -> new EntityNotFoundException("Rental with provided id does not exist!"));
     }
 
-    public Client findWithLockingById(long clientId){
+    public Client findWithLockingById(long clientId) {
         return clientRepository.findWithLockingById(clientId)
                 .orElseThrow(() -> new EntityNotFoundException("Rental with provided id does not exist!"));
     }

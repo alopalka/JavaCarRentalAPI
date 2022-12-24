@@ -1,6 +1,7 @@
 package com.rental.car.rental;
 
 import com.rental.car.car.CarService;
+import com.rental.car.car.CarUnavalableException;
 import com.rental.car.car.model.Car;
 import com.rental.car.car.model.CarType;
 import com.rental.car.client.ClientService;
@@ -10,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +33,9 @@ public class RentalService {
         );
 
         if (!carsRents.isEmpty()) {
-            throw new EntityNotFoundException("Car is being rented at this time!");
+            throw new CarUnavalableException("Car is being rented at this time!");
         }
+
         rental.setCar(car);
         rental.setClient(client);
 

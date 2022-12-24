@@ -16,7 +16,7 @@ public class ClientController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ClientDto> getClients(){
+    public List<ClientDto> getClients() {
         return clientService.findAll()
                 .stream()
                 .map(ClientDto::fromEntity)
@@ -25,14 +25,14 @@ public class ClientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ClientDto saveClient(@RequestBody ClientDto dto){
+    public ClientDto saveClient(@RequestBody ClientDto dto) {
         Client client = clientService.save(dto.toEntity());
         return ClientDto.fromEntity(client);
     }
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteClient(@PathVariable("id") long clientId){
+    public void deleteClient(@PathVariable("id") long clientId) {
         clientService.delete(clientId);
     }
 }

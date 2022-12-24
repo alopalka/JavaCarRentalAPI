@@ -2,6 +2,7 @@ package com.rental.car.car.model;
 
 import com.rental.car.rental.model.Rental;
 import lombok.*;
+
 import javax.persistence.*;
 import java.util.Set;
 
