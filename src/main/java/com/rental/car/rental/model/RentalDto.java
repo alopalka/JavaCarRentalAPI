@@ -24,9 +24,11 @@ public class RentalDto {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime date;
+    private LocalDateTime startDate;
 
-    private int durationHours;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", shape = JsonFormat.Shape.STRING)
+    private LocalDateTime endDate;
 
     @ReadOnlyProperty
     private double price;
@@ -36,16 +38,16 @@ public class RentalDto {
                 .id(rental.getId())
                 .carId(rental.getCar().getId())
                 .clientId(rental.getClient().getId())
-                .date(rental.getDate())
-                .durationHours(rental.getDurationHours())
+                .startDate(rental.getStartDate())
+                .endDate(rental.getEndDate())
                 .price(rental.getPrice())
                 .build();
     }
 
     public Rental toEntity() {
         return Rental.builder()
-                .date(date)
-                .durationHours(durationHours)
+                .startDate(startDate)
+                .endDate(endDate)
                 .build();
     }
 }

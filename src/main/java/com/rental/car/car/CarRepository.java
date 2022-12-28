@@ -9,8 +9,4 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 public interface CarRepository extends JpaRepository<Car, Long> {
-
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Transactional
-    Optional<Car> findWithLockingById(long id);
 }

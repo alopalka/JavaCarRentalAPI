@@ -1,5 +1,6 @@
 package com.rental.car.rental;
 
+import ch.qos.logback.core.boolex.EvaluationException;
 import com.rental.car.car.CarService;
 import com.rental.car.car.CarUnavalableException;
 import com.rental.car.car.model.Car;
@@ -11,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +28,19 @@ public class RentalService {
     }
 
     public Rental save(Rental rental, long carId, long clientId) {
-        Car car = carService.findWithLockingById(carId);
-        Client client = clientService.findWithLockingById(clientId);
 
-        List<Rental> carsRents = rentalRepository.findAllByCarIdAndDateBetween(
-                carId, rental.getDate(), rental.getDate().plusHours(rental.getDurationHours())
-        );
+        // IS VALIDATION IN SERVICE OK ?
+        // WHAT EXCEPTION TO THROW ?
+
+        if (rental.getStartDate().isAfter(rental.getEndDate())) {
+            throw new RuntimeException("Rental endDate is before startDate !");
+        }
+
+        Car car = carService.find(carId);
+        Client client = clientService.find(clientId);
+
+        List<Rental> carsRents = rentalRepository.findAllByCarIdAndDateWithInStartAndEnd(
+                carId, rental.getStartDate(), rental.getEndDate());
 
         if (!carsRents.isEmpty()) {
             throw new CarUnavalableException("Car is being rented at this time!");
@@ -39,7 +49,7 @@ public class RentalService {
         rental.setCar(car);
         rental.setClient(client);
 
-        double priceForRent = car.getCarType().getMultipler() * CarType.BASE * rental.getDurationHours();
+        double priceForRent = car.getCarType().getMultipler() * CarType.BASE * ChronoUnit.HOURS.between(rental.getStartDate(), rental.getEndDate());
 
         rental.setPrice(priceForRent);
         return rentalRepository.save(rental);

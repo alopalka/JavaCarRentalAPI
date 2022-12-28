@@ -21,7 +21,7 @@ public class Rental {
     private Client client;
     @ManyToOne
     private Car car;
-    private LocalDateTime date;
-    private int durationHours;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private double price;
 }
