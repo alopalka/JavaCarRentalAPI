@@ -4,6 +4,7 @@ package com.rental.car.service;
 import com.rental.car.car.CarService;
 import com.rental.car.car.model.Car;
 import com.rental.car.car.model.CarType;
+import com.rental.car.client.ClientService;
 import com.rental.car.client.model.Client;
 import com.rental.car.rental.RentalRepository;
 import com.rental.car.rental.RentalService;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,6 +31,12 @@ public class RentalServiceTest {
 
     @Mock
     private RentalRepository rentalRepository;
+
+    @Mock
+    private CarService carService;
+
+    @Mock
+    private ClientService clientService;
 
     @InjectMocks
     private RentalService rentalService;
@@ -68,8 +76,8 @@ public class RentalServiceTest {
                 .id(1)
                 .client(client1)
                 .car(car1)
-                .date(LocalDateTime.now())
-                .durationHours(48)
+                .startDate(LocalDateTime.parse("2020-12-20T20:20:20"))
+                .endDate(LocalDateTime.parse("2020-12-24T20:20:20"))
                 .price(4000)
                 .build();
 
@@ -77,8 +85,8 @@ public class RentalServiceTest {
                 .id(2)
                 .client(client2)
                 .car(car2)
-                .date(LocalDateTime.now())
-                .durationHours(72)
+                .startDate(LocalDateTime.parse("2020-12-20T20:20:20"))
+                .endDate(LocalDateTime.parse("2020-12-28T10:20:20"))
                 .price(3500)
                 .build();
 
@@ -110,8 +118,8 @@ public class RentalServiceTest {
                 .id(rentalId)
                 .client(client1)
                 .car(car1)
-                .date(LocalDateTime.now())
-                .durationHours(48)
+                .startDate(LocalDateTime.parse("2020-10-20T10:20:20"))
+                .endDate(LocalDateTime.parse("2020-12-02T10:20:20"))
                 .price(4000)
                 .build();
         when(rentalRepository.findById(rentalId)).thenReturn(Optional.of(rental1));
@@ -142,12 +150,13 @@ public class RentalServiceTest {
                 .id(1)
                 .client(client1)
                 .car(car1)
-                .date(LocalDateTime.now())
-                .durationHours(48)
+                .startDate(LocalDateTime.parse("2020-12-20T20:20:20"))
+                .endDate(LocalDateTime.parse("2020-12-24T20:20:20"))
                 .price(4000)
                 .build();
-        // problem with carService.findWithLockingById !!!!
         when(rentalRepository.save(rental1)).thenReturn(rental1);
+        when(carService.find(carId)).thenReturn(car1);
+        when(clientService.find(clientId)).thenReturn(client1);
         Rental rentalSaved = rentalService.save(rental1, carId, clientId);
         assertEquals(rental1, rentalSaved);
     }

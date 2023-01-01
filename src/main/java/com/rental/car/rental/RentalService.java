@@ -1,6 +1,5 @@
 package com.rental.car.rental;
 
-import ch.qos.logback.core.boolex.EvaluationException;
 import com.rental.car.car.CarService;
 import com.rental.car.car.CarUnavalableException;
 import com.rental.car.car.model.Car;
@@ -12,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +27,6 @@ public class RentalService {
     }
 
     public Rental save(Rental rental, long carId, long clientId) {
-
-        // IS VALIDATION IN SERVICE OK ?
-        // WHAT EXCEPTION TO THROW ?
-
         if (rental.getStartDate().isAfter(rental.getEndDate())) {
             throw new RuntimeException("Rental endDate is before startDate !");
         }
@@ -49,7 +44,8 @@ public class RentalService {
         rental.setCar(car);
         rental.setClient(client);
 
-        double priceForRent = car.getCarType().getMultipler() * CarType.BASE * ChronoUnit.HOURS.between(rental.getStartDate(), rental.getEndDate());
+        long hours = Duration.between(rental.getStartDate(), rental.getEndDate()).toHours();
+        double priceForRent = car.getCarType().getMultipler() * CarType.BASE * hours;
 
         rental.setPrice(priceForRent);
         return rentalRepository.save(rental);
