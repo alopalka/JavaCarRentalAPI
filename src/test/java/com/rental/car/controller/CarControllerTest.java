@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,16 +38,17 @@ class CarControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CarService carServiceMock;
+    private CarRepository carRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
     void shouldFindAll_ShouldReturnAllCars() throws Exception {
+
         CarDto car1 = CarDto.builder()
                 .make("Audi")
-                .model("S6 C7")
+                .model("RS3 8Y")
                 .carType(CarType.SUPERSPORT)
                 .build();
         CarDto car2 = CarDto.builder()
@@ -55,10 +57,8 @@ class CarControllerTest {
                 .carType(CarType.LUXURY)
                 .build();
 
-        when(carServiceMock.findAll()).thenReturn(List.of(car1.toEntity(), car2.toEntity()));
-
-        when(carServiceMock.save(car1.toEntity())).thenReturn(car1.toEntity());
-        when(carServiceMock.save(car2.toEntity())).thenReturn(car2.toEntity());
+        when(carRepository.findAll()).thenReturn(Arrays.asList(car1.toEntity(), car2.toEntity()));
+        when(carRepository.save(any())).thenReturn(car1.toEntity()).thenReturn(car2.toEntity());
 
         mockMvc.perform(post("/api/v1/cars")
                         .with(SecurityMockMvcRequestPostProcessors.user("admin").password("admin"))
