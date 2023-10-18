@@ -45,7 +45,7 @@ public class Client {
     private String lastName;
 
     @Column(unique = true)
-    private long pesel;
+    private String pesel;
 
     @Column(unique = true)
     private String email;
@@ -56,5 +56,6 @@ public class Client {
     private int version;
 
     @OneToMany(mappedBy = "client")
+    @Builder.Default
     private Set<Rental> rentals = new HashSet<>();
 }

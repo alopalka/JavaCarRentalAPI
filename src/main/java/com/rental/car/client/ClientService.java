@@ -1,8 +1,10 @@
 package com.rental.car.client;
 
+import com.rental.car.client.mappings.ClientToClientDtoMapper;
 import com.rental.car.client.model.Client;
 import com.rental.car.client.model.ClientDto;
-import com.rental.car.client.model.command.CreateClientCommand;
+import com.rental.car.client.model.CreateClientCommand;
+import com.rental.car.client.model.UpdateClientCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,22 +12,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.OptimisticLockException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ClientService {
     private final ClientRepository clientRepository;
+    private final ClientToClientDtoMapper clientDtoMapper;
 
     @Transactional(readOnly = true)
     public Page<ClientDto> findAll(Pageable pageable) {
         return clientRepository.findAll(pageable)
-                .map(ClientDto::fromEntity);
+                .map(clientDtoMapper::fromEntity);
     }
 
     @Transactional(readOnly = true)
-    public ClientDto findById(long clientId) {
+    public ClientDto findById(UUID clientId) {
         return clientRepository.findById(clientId)
-                .map(ClientDto::fromEntity)
+                .map(clientDtoMapper::fromEntity)
                 .orElseThrow(() -> new EntityNotFoundException("Client with provided id does not exist!"));
     }
 
@@ -37,10 +42,27 @@ public class ClientService {
                 .email(command.getEmail())
                 .build());
 
-        return ClientDto.fromEntity(client);
+        return clientDtoMapper.fromEntity(client);
     }
 
-    public void delete(long clientId) {
+    @Transactional
+    public ClientDto update(UpdateClientCommand command) {
+        Client clientToUpdate = clientRepository.findById(command.getId())
+                .orElseThrow(EntityNotFoundException::new);
+
+        if (clientToUpdate.getVersion() != command.getVersion()) {
+            throw new OptimisticLockException("Version mismatch: current version is " + clientToUpdate.getVersion() + " but command has version " + command.getVersion());
+        }
+
+        clientToUpdate.setFirstName(command.getFirstName());
+        clientToUpdate.setLastName(command.getLastName());
+        clientToUpdate.setPesel(command.getPesel());
+        clientToUpdate.setEmail(command.getEmail());
+
+        return clientDtoMapper.fromEntity(clientRepository.saveAndFlush(clientToUpdate));
+    }
+
+    public void delete(UUID clientId) {
         clientRepository.deleteById(clientId);
     }
 }

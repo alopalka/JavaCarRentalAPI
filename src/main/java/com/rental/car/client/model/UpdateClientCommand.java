@@ -3,6 +3,7 @@ package com.rental.car.client.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -29,4 +30,7 @@ public class UpdateClientCommand {
     @NotBlank(message = "EMAIL_NOT_BLANK")
     @Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "EMAIL_WRONG_FORMAT")
     private String email;
+
+    @Min(1)
+    private Long version;
 }
