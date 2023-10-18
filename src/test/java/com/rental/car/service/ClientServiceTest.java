@@ -37,7 +37,7 @@ public class ClientServiceTest {
                 .pesel(2221112221l)
                 .build();
         when(clientRepository.findById(clientId)).thenReturn(Optional.of(client));
-        Client clientFound = clientService.find(clientId);
+        Client clientFound = clientService.findById(clientId);
         assertEquals(client, clientFound);
     }
 
@@ -45,7 +45,7 @@ public class ClientServiceTest {
     void shouldThrowEntityNotFoundExceptionWhenClientNotFound() {
         long clientId = 1;
         when(clientRepository.findById(clientId)).thenReturn(Optional.empty());
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> clientService.find(clientId));
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> clientService.findById(clientId));
         assertEquals("Client with provided id does not exist!", exception.getMessage());
     }
 

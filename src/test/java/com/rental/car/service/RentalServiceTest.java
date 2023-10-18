@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -156,7 +155,7 @@ public class RentalServiceTest {
                 .build();
         when(rentalRepository.save(rental1)).thenReturn(rental1);
         when(carService.find(carId)).thenReturn(car1);
-        when(clientService.find(clientId)).thenReturn(client1);
+        when(clientService.findById(clientId)).thenReturn(client1);
         Rental rentalSaved = rentalService.save(rental1, carId, clientId);
         assertEquals(rental1, rentalSaved);
     }

@@ -1,38 +1,19 @@
 package com.rental.car.client;
 
-import com.rental.car.client.model.Client;
 import com.rental.car.client.model.ClientDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import com.rental.car.client.model.command.CreateClientCommand;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
-import java.util.List;
+@Tag(name = "CRUD REST API for Client",
+        description = "CRUD REST API for Authors to CREATE, READ, UPDATE AND DELETE author details")
+public interface ClientController {
 
-@RestController
-@RequestMapping("api/v1/clients")
-@RequiredArgsConstructor
-public class ClientController {
-    private final ClientService clientService;
+    ResponseEntity<Page<ClientDto>> findAll(Pageable pageable);
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<ClientDto> getClients() {
-        return clientService.findAll()
-                .stream()
-                .map(ClientDto::fromEntity)
-                .toList();
-    }
+    ResponseEntity<ClientDto> saveClient(CreateClientCommand command);
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ClientDto saveClient(@RequestBody ClientDto dto) {
-        Client client = clientService.save(dto.toEntity());
-        return ClientDto.fromEntity(client);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteClient(@PathVariable("id") long clientId) {
-        clientService.delete(clientId);
-    }
+    ResponseEntity<Void> deleteClient(long clientId);
 }

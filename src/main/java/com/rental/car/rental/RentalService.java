@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -32,7 +31,7 @@ public class RentalService {
         }
 
         Car car = carService.find(carId);
-        Client client = clientService.find(clientId);
+        Client client = clientService.findById(clientId);
 
         List<Rental> carsRents = rentalRepository.findAllByCarIdAndDateWithInStartAndEnd(
                 carId, rental.getStartDate(), rental.getEndDate());
