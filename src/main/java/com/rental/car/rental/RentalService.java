@@ -4,6 +4,7 @@ import com.rental.car.car.CarService;
 import com.rental.car.car.CarUnavalableException;
 import com.rental.car.car.model.Car;
 import com.rental.car.car.model.CarType;
+import com.rental.car.client.ClientRepository;
 import com.rental.car.client.ClientService;
 import com.rental.car.client.model.Client;
 import com.rental.car.rental.model.Rental;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.time.Duration;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,17 +23,19 @@ public class RentalService {
     private final CarService carService;
     private final ClientService clientService;
 
+    private final ClientRepository clientRepository;
+
     public List<Rental> findAll() {
         return rentalRepository.findAll();
     }
 
-    public Rental save(Rental rental, long carId, long clientId) {
+    public Rental save(Rental rental, UUID carId, UUID clientId) {
         if (rental.getStartDate().isAfter(rental.getEndDate())) {
             throw new RuntimeException("Rental endDate is before startDate !");
         }
 
         Car car = carService.find(carId);
-        Client client = clientService.findById(clientId);
+        Client client = clientRepository.findById(clientId).orElseThrow(EntityNotFoundException::new);
 
         List<Rental> carsRents = rentalRepository.findAllByCarIdAndDateWithInStartAndEnd(
                 carId, rental.getStartDate(), rental.getEndDate());
@@ -50,11 +54,11 @@ public class RentalService {
         return rentalRepository.save(rental);
     }
 
-    public void delete(long rentalId) {
+    public void delete(UUID rentalId) {
         rentalRepository.deleteById(rentalId);
     }
 
-    public Rental find(long rentalId) {
+    public Rental find(UUID rentalId) {
         return rentalRepository.findById(rentalId)
                 .orElseThrow(() -> new EntityNotFoundException("Rental with provided id does not exist!"));
     }

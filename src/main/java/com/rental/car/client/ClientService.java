@@ -1,6 +1,5 @@
 package com.rental.car.client;
 
-import com.rental.car.client.mappings.ClientToClientDtoMapper;
 import com.rental.car.client.model.Client;
 import com.rental.car.client.model.ClientDto;
 import com.rental.car.client.model.CreateClientCommand;
@@ -19,18 +18,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ClientService {
     private final ClientRepository clientRepository;
-    private final ClientToClientDtoMapper clientDtoMapper;
 
     @Transactional(readOnly = true)
     public Page<ClientDto> findAll(Pageable pageable) {
         return clientRepository.findAll(pageable)
-                .map(clientDtoMapper::fromEntity);
+                .map(ClientDto::fromEntity);
     }
 
     @Transactional(readOnly = true)
     public ClientDto findById(UUID clientId) {
         return clientRepository.findById(clientId)
-                .map(clientDtoMapper::fromEntity)
+                .map(ClientDto::fromEntity)
                 .orElseThrow(() -> new EntityNotFoundException("Client with provided id does not exist!"));
     }
 
@@ -42,7 +40,7 @@ public class ClientService {
                 .email(command.getEmail())
                 .build());
 
-        return clientDtoMapper.fromEntity(client);
+        return ClientDto.fromEntity(client);
     }
 
     @Transactional
@@ -59,7 +57,7 @@ public class ClientService {
         clientToUpdate.setPesel(command.getPesel());
         clientToUpdate.setEmail(command.getEmail());
 
-        return clientDtoMapper.fromEntity(clientRepository.saveAndFlush(clientToUpdate));
+        return ClientDto.fromEntity(clientRepository.saveAndFlush(clientToUpdate));
     }
 
     public void delete(UUID clientId) {

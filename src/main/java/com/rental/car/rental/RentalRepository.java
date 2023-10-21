@@ -7,10 +7,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 
-public interface RentalRepository extends JpaRepository<Rental, Long> {
+public interface RentalRepository extends JpaRepository<Rental, UUID> {
     @Query(value = "SELECT r FROM Rental r WHERE r.car.id = :id AND (r.startDate BETWEEN :startDate AND :endDate OR r.endDate BETWEEN :startDate AND :endDate)")
-    List<Rental> findAllByCarIdAndDateWithInStartAndEnd(@Param("id") long id, @Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
+    List<Rental> findAllByCarIdAndDateWithInStartAndEnd(@Param("id") UUID id, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }
 

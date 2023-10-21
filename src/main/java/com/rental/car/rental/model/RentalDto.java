@@ -10,17 +10,19 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
 public class RentalDto {
-    private long id;
+
+    private UUID id;
     @NotBlank(message = "Car ID can not be blank!")
-    private long carId;
+    private UUID carId;
     @NotBlank(message = "Client ID can not be blank!")
-    private long clientId;
+    private UUID clientId;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", shape = JsonFormat.Shape.STRING)

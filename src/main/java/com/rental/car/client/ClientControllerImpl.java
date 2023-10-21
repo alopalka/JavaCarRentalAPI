@@ -3,7 +3,6 @@ package com.rental.car.client;
 import com.rental.car.client.model.ClientDto;
 import com.rental.car.client.model.CreateClientCommand;
 import com.rental.car.client.model.UpdateClientCommand;
-import com.rental.car.client.model.command.CreateClientCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -33,7 +33,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Where(clause = "deleted = false")
 @SQLDelete(sql = "update clients set deleted = true where id = ?1 and version = ?2")
-public class Client {
+public class Client{
 
     @Id
     @GeneratedValue(generator = "UUID")
